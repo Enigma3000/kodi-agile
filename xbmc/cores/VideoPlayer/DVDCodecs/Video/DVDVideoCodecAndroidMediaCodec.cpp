@@ -355,7 +355,7 @@ CDVDVideoCodecAndroidMediaCodec::CDVDVideoCodecAndroidMediaCodec(CProcessInfo &p
 , m_render_sw(false)
 , m_render_surface(surface_render)
 {
-  memset(&m_videobuffer, 0x00, sizeof(DVDVideoPicture));
+  memset(&m_videobuffer, 0x00, sizeof(VideoPicture));
 }
 
 CDVDVideoCodecAndroidMediaCodec::~CDVDVideoCodecAndroidMediaCodec()
@@ -655,9 +655,9 @@ bool CDVDVideoCodecAndroidMediaCodec::Open(CDVDStreamInfo &hints, CDVDCodecOptio
     m_render_surface = false;
   }
 
-  // setup a YUV420P DVDVideoPicture buffer.
+  // setup a YUV420P VideoPicture buffer.
   // first make sure all properties are reset.
-  memset(&m_videobuffer, 0x00, sizeof(DVDVideoPicture));
+  memset(&m_videobuffer, 0x00, sizeof(VideoPicture));
 
   m_videobuffer.dts = DVD_NOPTS_VALUE;
   m_videobuffer.pts = DVD_NOPTS_VALUE;
@@ -887,7 +887,7 @@ void CDVDVideoCodecAndroidMediaCodec::Reset()
       xbmc_jnienv()->ExceptionClear();
     }
 
-    // Invalidate our local DVDVideoPicture bits
+    // Invalidate our local VideoPicture bits
     m_videobuffer.pts = DVD_NOPTS_VALUE;
     if (!m_render_sw)
       m_videobuffer.mediacodec = NULL;
@@ -903,7 +903,7 @@ bool CDVDVideoCodecAndroidMediaCodec::Reconfigure(CDVDStreamInfo &hints)
   return false;
 }
 
-CDVDVideoCodec::VCReturn CDVDVideoCodecAndroidMediaCodec::GetPicture(DVDVideoPicture* pDvdVideoPicture)
+CDVDVideoCodec::VCReturn CDVDVideoCodecAndroidMediaCodec::GetPicture(VideoPicture* pVideoPicture)
 {
   if (!m_opened)
     return VC_NONE;
@@ -915,15 +915,15 @@ CDVDVideoCodec::VCReturn CDVDVideoCodecAndroidMediaCodec::GetPicture(DVDVideoPic
     {
       m_checkForPicture = false;
       m_noPictureLoop = 0;
-      *pDvdVideoPicture = m_videobuffer;
+      *pVideoPicture = m_videobuffer;
 
-      // Invalidate our local DVDVideoPicture bits
+      // Invalidate our local VideoPicture bits
       m_videobuffer.pts = DVD_NOPTS_VALUE;
       if (!m_render_sw)
         m_videobuffer.mediacodec = NULL;
 
       if (g_advancedSettings.CanLogComponent(LOGVIDEO))
-        CLog::Log(LOGDEBUG, "CDVDVideoCodecAndroidMediaCodec::GetPicture pts:%0.4lf", pDvdVideoPicture->pts);
+        CLog::Log(LOGDEBUG, "CDVDVideoCodecAndroidMediaCodec::GetPicture pts:%0.4lf", pVideoPicture->pts);
 
       return VC_PICTURE;
     }
@@ -958,11 +958,11 @@ CDVDVideoCodec::VCReturn CDVDVideoCodecAndroidMediaCodec::GetPicture(DVDVideoPic
   return VC_NONE;
 }
 
-bool CDVDVideoCodecAndroidMediaCodec::ClearPicture(DVDVideoPicture* pDvdVideoPicture)
+bool CDVDVideoCodecAndroidMediaCodec::ClearPicture(VideoPicture* pVideoPicture)
 {
-  if (pDvdVideoPicture->format == RENDER_FMT_MEDIACODEC || pDvdVideoPicture->format == RENDER_FMT_MEDIACODECSURFACE)
-    SAFE_RELEASE(pDvdVideoPicture->mediacodec);
-  memset(pDvdVideoPicture, 0x00, sizeof(DVDVideoPicture));
+  if (pVideoPicture->format == RENDER_FMT_MEDIACODEC || pVideoPicture->format == RENDER_FMT_MEDIACODECSURFACE)
+    SAFE_RELEASE(pVideoPicture->mediacodec);
+  memset(pVideoPicture, 0x00, sizeof(VideoPicture));
 
   return true;
 }

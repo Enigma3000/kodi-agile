@@ -244,7 +244,7 @@ int CWinRenderer::NextYV12Texture()
     return -1;
 }
 
-bool CWinRenderer::IsPictureHW(DVDVideoPicture &picture)
+bool CWinRenderer::IsPictureHW(VideoPicture &picture)
 {
   if (m_renderMethod == RENDER_DXVA
     || picture.format == RENDER_FMT_DXVA)
@@ -254,7 +254,7 @@ bool CWinRenderer::IsPictureHW(DVDVideoPicture &picture)
   return false;
 }
 
-void CWinRenderer::AddVideoPictureHW(DVDVideoPicture &picture, int index)
+void CWinRenderer::AddVideoPictureHW(VideoPicture &picture, int index)
 {
   if (m_renderMethod == RENDER_DXVA)
   {
@@ -1312,7 +1312,7 @@ bool YUVBuffer::IsReadyToRender()
   return !m_locked;
 }
 
-bool YUVBuffer::CopyFromPicture(DVDVideoPicture &picture)
+bool YUVBuffer::CopyFromPicture(VideoPicture &picture)
 {
   if (picture.format == RENDER_FMT_DXVA)
   {

@@ -20,8 +20,6 @@
 
 #include "RendererVDPAU.h"
 
-#ifdef HAVE_LIBVDPAU
-
 #include "ServiceBroker.h"
 #include "cores/VideoPlayer/DVDCodecs/Video/VDPAU.h"
 #include "settings/Settings.h"
@@ -43,9 +41,9 @@ CRendererVDPAU::~CRendererVDPAU()
   }
 }
 
-void CRendererVDPAU::AddVideoPictureHW(DVDVideoPicture &picture, int index)
+void CRendererVDPAU::AddVideoPictureHW(VideoPicture &picture, int index)
 {
-  VDPAU::CVdpauRenderPicture *vdpau = picture.vdpau;
+  VDPAU::CVdpauRenderPicture *vdpau = static_cast<VDPAU::CVdpauRenderPicture*>(picture.hwPic);
   YUVBUFFER &buf = m_buffers[index];
   VDPAU::CVdpauRenderPicture *pic = vdpau->Acquire();
   if (buf.hwDec)
@@ -409,4 +407,3 @@ bool CRendererVDPAU::UploadVDPAUTexture420(int index)
   return true;
 }
 
-#endif

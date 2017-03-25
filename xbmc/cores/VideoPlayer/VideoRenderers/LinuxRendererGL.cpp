@@ -265,7 +265,7 @@ bool CLinuxRendererGL::ValidateRenderTarget()
   return false;
 }
 
-bool CLinuxRendererGL::Configure(unsigned int width, unsigned int height, unsigned int d_width, unsigned int d_height, float fps, unsigned flags, ERenderFormat format, unsigned extended_format, unsigned int orientation)
+bool CLinuxRendererGL::Configure(unsigned int width, unsigned int height, unsigned int d_width, unsigned int d_height, float fps, unsigned flags, ERenderFormat format, void *hwPic, unsigned int orientation)
 {
   m_sourceWidth = width;
   m_sourceHeight = height;
@@ -912,6 +912,28 @@ void CLinuxRendererGL::UpdateVideoFilter()
   m_renderQuality = RQ_SINGLEPASS;
 }
 
+EShaderFormat CLinuxRendererGL::GetShaderFormat(ERenderFormat renderFormat)
+{
+  EShaderFormat ret = SHADER_NONE;
+
+  if (m_format == RENDER_FMT_YUV420P)
+    ret = SHADER_YV12;
+  else if (m_format == RENDER_FMT_YUV420P10)
+    ret = SHADER_YV12_10;
+  else if (m_format == RENDER_FMT_YUV420P16)
+    ret = SHADER_YV12_16;
+  else if (m_format == RENDER_FMT_NV12)
+    ret = SHADER_NV12;
+  else if (m_format == RENDER_FMT_YUYV422)
+    ret = SHADER_YUY2;
+  else if (m_format == RENDER_FMT_UYVY422)
+    ret = SHADER_UYVY;
+  else
+    CLog::Log(LOGERROR, "CLinuxRendererGL::GetShaderFormat - unsupported format %d", renderFormat);
+
+  return ret;
+}
+
 void CLinuxRendererGL::LoadShaders(int field)
 {
   m_reloadShaders = 0;
@@ -952,7 +974,8 @@ void CLinuxRendererGL::LoadShaders(int field)
                                m_cmsOn ? m_tCLUTTex : 0,
                                m_CLUTsize);
         }
-        m_pYUVShader = new YUV2RGBProgressiveShader(m_textureTarget==GL_TEXTURE_RECTANGLE_ARB, m_iFlags, m_format,
+        EShaderFormat shaderFormat = GetShaderFormat(m_format);
+        m_pYUVShader = new YUV2RGBProgressiveShader(m_textureTarget==GL_TEXTURE_RECTANGLE_ARB, m_iFlags, shaderFormat,
                                                     m_nonLinStretch && m_renderQuality == RQ_SINGLEPASS,
                                                     out);
         if (!m_cmsOn)
@@ -983,7 +1006,8 @@ void CLinuxRendererGL::LoadShaders(int field)
         m_renderMethod = RENDER_ARB ;
 
         // create regular progressive scan shader
-        m_pYUVShader = new YUV2RGBProgressiveShaderARB(m_textureTarget==GL_TEXTURE_RECTANGLE_ARB, m_iFlags, m_format);
+        EShaderFormat shaderFormat = GetShaderFormat(m_format);
+        m_pYUVShader = new YUV2RGBProgressiveShaderARB(m_textureTarget==GL_TEXTURE_RECTANGLE_ARB, m_iFlags, shaderFormat);
         m_pYUVShader->SetConvertFullColorRange(m_fullRange);
         CLog::Log(LOGNOTICE, "GL: Selecting Single Pass ARB YUV2RGB shader");
 

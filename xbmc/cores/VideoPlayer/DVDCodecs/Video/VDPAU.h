@@ -190,7 +190,7 @@ struct CVdpauConfig
  */
 struct CVdpauDecodedPicture
 {
-  DVDVideoPicture DVDPic;
+  VideoPicture DVDPic;
   VdpVideoSurface videoSurface;
 };
 
@@ -199,7 +199,7 @@ struct CVdpauDecodedPicture
  */
 struct CVdpauProcessedPicture
 {
-  DVDVideoPicture DVDPic;
+  VideoPicture DVDPic;
   VdpVideoSurface videoSurface;
   VdpOutputSurface outputSurface;
   bool crop;
@@ -208,7 +208,7 @@ struct CVdpauProcessedPicture
 /**
  * Ready to render textures
  * Sent from COutput back to CDecoder
- * Objects are referenced by DVDVideoPicture and are sent
+ * Objects are referenced by VideoPicture and are sent
  * to renderer
  */
 class CVdpauRenderPicture
@@ -219,7 +219,7 @@ public:
   CVdpauRenderPicture(CCriticalSection &section)
     : refCount(0), renderPicSection(section) { fence = None; }
   void Sync();
-  DVDVideoPicture DVDPic;
+  VideoPicture DVDPic;
   int texWidth, texHeight;
   CRect crop;
   GLuint texture[4];
@@ -560,7 +560,7 @@ public:
 
   virtual bool Open      (AVCodecContext* avctx, AVCodecContext* mainctx, const enum AVPixelFormat, unsigned int surfaces = 0);
   virtual CDVDVideoCodec::VCReturn Decode    (AVCodecContext* avctx, AVFrame* frame);
-  virtual bool GetPicture(AVCodecContext* avctx, DVDVideoPicture* picture);
+  virtual bool GetPicture(AVCodecContext* avctx, VideoPicture* picture);
   virtual void Reset();
   virtual void Close();
   virtual long Release();

@@ -412,7 +412,7 @@ bool CProcessorHD::CreateSurfaces()
   return true;
 }
 
-CRenderPicture *CProcessorHD::Convert(DVDVideoPicture &picture)
+CRenderPicture *CProcessorHD::Convert(VideoPicture &picture)
 {
   if ( picture.format != RENDER_FMT_YUV420P
     && picture.format != RENDER_FMT_YUV420P10

@@ -58,7 +58,7 @@ CRenderInfo CRendererVTB::GetRenderInfo()
   return info;
 }
 
-void CRendererVTB::AddVideoPictureHW(DVDVideoPicture &picture, int index)
+void CRendererVTB::AddVideoPictureHW(VideoPicture &picture, int index)
 {
   YUVBUFFER &buf = m_buffers[index];
   CVTBData *vtbdata = (CVTBData*)buf.hwDec;

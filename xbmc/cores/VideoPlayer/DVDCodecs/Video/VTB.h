@@ -37,7 +37,7 @@ public:
   virtual bool Open(AVCodecContext* avctx, AVCodecContext* mainctx,
                     const enum AVPixelFormat, unsigned int surfaces = 0) override;
   virtual CDVDVideoCodec::VCReturn Decode(AVCodecContext* avctx, AVFrame* frame) override;
-  virtual bool GetPicture(AVCodecContext* avctx, DVDVideoPicture* picture) override;
+  virtual bool GetPicture(AVCodecContext* avctx, VideoPicture* picture) override;
   virtual CDVDVideoCodec::VCReturn Check(AVCodecContext* avctx) override;
   virtual const std::string Name() override { return "vtb"; }
   virtual unsigned GetAllowedReferences() override ;

@@ -67,7 +67,7 @@ enum RenderMethods
   RENDER_OVERLAYS        = 99   // to retain compatibility
 };
 
-struct DVDVideoPicture;
+struct VideoPicture;
 class CRenderCapture;
 
 class CBaseRenderer
@@ -77,12 +77,12 @@ public:
   virtual ~CBaseRenderer();
 
   // Player functions
-  virtual bool Configure(unsigned int width, unsigned int height, unsigned int d_width, unsigned int d_height, float fps, unsigned flags, ERenderFormat format, unsigned extended_formatl, unsigned int orientation) = 0;
+  virtual bool Configure(unsigned int width, unsigned int height, unsigned int d_width, unsigned int d_height, float fps, unsigned flags, ERenderFormat format, void* hwPic, unsigned int orientation) = 0;
   virtual bool IsConfigured() = 0;
   virtual int GetImage(YV12Image *image, int source = -1, bool readonly = false) = 0;
   virtual void ReleaseImage(int source, bool preserve = false) = 0;
-  virtual void AddVideoPictureHW(DVDVideoPicture &picture, int index) {};
-  virtual bool IsPictureHW(DVDVideoPicture &picture) { return false; };
+  virtual void AddVideoPictureHW(VideoPicture &picture, int index) {};
+  virtual bool IsPictureHW(VideoPicture &picture) { return false; };
   virtual void FlipPage(int source) = 0;
   virtual void PreInit() = 0;
   virtual void UnInit() = 0;
@@ -98,6 +98,7 @@ public:
   virtual void RenderUpdate(bool clear, unsigned int flags = 0, unsigned int alpha = 255) = 0;
   virtual bool RenderCapture(CRenderCapture* capture) = 0;
   virtual bool HandlesRenderFormat(ERenderFormat format) { return format == m_format; };
+  virtual bool ConfigChanged(void *hwPic) { return false; };
 
   // Feature support
   virtual bool SupportsMultiPassRendering() = 0;

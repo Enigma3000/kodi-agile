@@ -50,7 +50,7 @@ class DllAvUtil;
 class DllAvCodec;
 class DllSwScale;
 
-struct DVDVideoPicture;
+struct VideoPicture;
 
 struct DRAWRECT
 {
@@ -115,7 +115,7 @@ struct YUVBuffer : SVideoBuffer
   ~YUVBuffer();
   bool Create(ERenderFormat format, unsigned int width, unsigned int height, bool dynamic);
   unsigned int GetActivePlanes() { return m_activeplanes; }
-  bool CopyFromPicture(DVDVideoPicture &picture);
+  bool CopyFromPicture(VideoPicture &picture);
 
   // SVideoBuffer overrides
   void Release() override;
@@ -164,8 +164,8 @@ public:
   virtual bool Configure(unsigned int width, unsigned int height, unsigned int d_width, unsigned int d_height, float fps, unsigned flags, ERenderFormat format, unsigned extended_format, unsigned int orientation);
   virtual int GetImage(YV12Image *image, int source = AUTOSOURCE, bool readonly = false);
   virtual void ReleaseImage(int source, bool preserve = false);
-  virtual void AddVideoPictureHW(DVDVideoPicture &picture, int index) override;
-  virtual bool IsPictureHW(DVDVideoPicture &picture) override;
+  virtual void AddVideoPictureHW(VideoPicture &picture, int index) override;
+  virtual bool IsPictureHW(VideoPicture &picture) override;
   virtual void FlipPage(int source);
   virtual void PreInit();
   virtual void UnInit();

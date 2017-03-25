@@ -1172,7 +1172,7 @@ CDVDVideoCodec::VCReturn CDecoder::Decode(AVCodecContext *avctx, AVFrame *pFrame
   return CDVDVideoCodec::VC_ERROR;
 }
 
-bool CDecoder::GetPicture(AVCodecContext* avctx, DVDVideoPicture* picture)
+bool CDecoder::GetPicture(AVCodecContext* avctx, VideoPicture* picture)
 {
   CSingleLock lock(m_DecoderSection);
 
@@ -1180,7 +1180,7 @@ bool CDecoder::GetPicture(AVCodecContext* avctx, DVDVideoPicture* picture)
     return false;
 
   *picture = m_presentPicture->DVDPic;
-  picture->vdpau = m_presentPicture;
+  picture->hwPic = m_presentPicture;
 
   return true;
 }

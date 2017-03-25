@@ -22,8 +22,6 @@
 
 #include "system.h"
 
-#ifdef HAVE_LIBVDPAU
-
 #include "cores/VideoPlayer/VideoRenderers/LinuxRendererGL.h"
 
 class CRendererVDPAU : public CLinuxRendererGL
@@ -33,7 +31,7 @@ public:
   virtual ~CRendererVDPAU();
 
   // Player functions
-  virtual void AddVideoPictureHW(DVDVideoPicture &picture, int index);
+  virtual void AddVideoPictureHW(VideoPicture &picture, int index);
   virtual void ReleaseBuffer(int idx);
   virtual CRenderInfo GetRenderInfo();
 
@@ -59,5 +57,4 @@ protected:
   bool UploadVDPAUTexture420(int index);
 };
 
-#endif
 
